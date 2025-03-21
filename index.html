@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<!-- saved from url=(0037)file:///C:/dev/sl/bathroom/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Layout Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .parameters {
+            max-width: 300px;
+            margin-right: 20px;
+        }
+
+        input, select {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #45a049;
+            }
+
+        .result {
+            margin-top: 20px;
+        }
+
+        .tile {
+            background-color: #ccc;
+            display: inline-block;
+            margin: 0;
+            cursor: move;
+            position: absolute;
+        }
+
+        .tile-container-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .tile-container {
+            position: relative;
+            border: 1px solid #000;
+        }
+
+        .tile-options {
+            margin-bottom: 20px;
+        }
+
+        .dimensions {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+            border: 1px solid #000;
+        }
+
+        .width-dimension {
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .height-dimension {
+            top: 50%;
+            left: -50px;
+            transform: translateY(-50%) rotate(-90deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="parameters">
+            <h1>Tile Layout Calculator</h1>
+            <label for="roomWidth">Room Width (meters):</label>
+            <input type="number" id="roomWidth" step="0.01">
+
+            <label for="roomHeight">Room Height (meters):</label>
+            <input type="number" id="roomHeight" step="0.01">
+
+            <label for="tileWidth">Tile Width (centimeters):</label>
+            <input type="number" id="tileWidth" step="0.1">
+
+            <label for="tileHeight">Tile Height (centimeters):</label>
+            <input type="number" id="tileHeight" step="0.1">
+
+            <label for="tileGap">Tile Gap (millimeters):</label>
+            <input type="number" id="tileGap" step="0.1">
+
+            <div class="tile-options">
+                <h3>Tile Options</h3>
+                <div id="tileOptionsContainer"><div id="tileOption1">
+                            <label for="tileColor1">Tile Color:</label>
+                            <input type="color" id="tileColor1" value="#2ac0be">
+
+                            <label for="tilePattern1">Tile Pattern:</label>
+                            <select id="tilePattern1">
+                                <option value="none" selected="">None</option>
+                                <option value="stripes">Stripes</option>
+                                <option value="dots">Dots</option>
+                            </select>
+                            <button onclick="removeTileOption(1)">Remove</button>
+                            <br>
+                        </div><div id="tileOption2">
+                            <label for="tileColor2">Tile Color:</label>
+                            <input type="color" id="tileColor2" value="#5ad01b">
+
+                            <label for="tilePattern2">Tile Pattern:</label>
+                            <select id="tilePattern2">
+                                <option value="none" selected="">None</option>
+                                <option value="stripes">Stripes</option>
+                                <option value="dots">Dots</option>
+                            </select>
+                            <button onclick="removeTileOption(2)">Remove</button>
+                            <br>
+                        </div></div>
+                <button onclick="addTileOption()">Add Tile Option</button>
+            </div>
+
+            <button onclick="calculateTiles()">Calculate</button>
+            <button onclick="saveConfiguration()">Save Configuration</button>
+            <button onclick="loadConfiguration()">Load Configuration</button>
+
+            <div class="result" id="result">You will need approximately 60 tiles to cover the floor.</div>
+        </div>
+        <div class="tile-container-wrapper">
+            <div class="tile-container" id="tileContainer" style="width: 600px; height: 400px;">
+                    <div class="dimensions width-dimension" id="widthDimension">3.00m</div>
+                    <div class="dimensions height-dimension" id="heightDimension">2.00m</div>
+                <div class="tile" id="tile-0-0" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 0px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-1" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 51px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-2" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 102px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-3" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 153px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-4" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 204px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-5" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 255px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-6" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 306px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-7" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 357px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-8" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 408px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-9" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 459px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-10" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 510px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-0-11" draggable="true" style="background-color: rgb(90, 208, 27); width: 39px; height: 80px; left: 561px; top: 0px; border-width: 1px;"></div><div class="tile" id="tile-1-0" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 0px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-1" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 51px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-2" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 102px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-3" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 153px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-4" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 204px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-5" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 255px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-6" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 306px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-7" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 357px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-8" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 408px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-9" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 459px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-10" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 510px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-1-11" draggable="true" style="background-color: rgb(90, 208, 27); width: 39px; height: 80px; left: 561px; top: 81px; border-width: 1px;"></div><div class="tile" id="tile-2-0" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 0px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-1" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 51px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-2" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 102px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-3" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 153px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-4" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 204px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-5" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 255px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-6" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 306px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-7" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 357px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-8" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 408px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-9" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 459px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-10" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 510px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-2-11" draggable="true" style="background-color: rgb(42, 192, 190); width: 39px; height: 80px; left: 561px; top: 162px; border-width: 1px;"></div><div class="tile" id="tile-3-0" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 0px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-1" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 51px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-2" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 102px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-3" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 153px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-4" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 204px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-5" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 255px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-6" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 306px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-7" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 357px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-8" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 408px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-9" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 80px; left: 459px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-10" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 80px; left: 510px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-3-11" draggable="true" style="background-color: rgb(90, 208, 27); width: 39px; height: 80px; left: 561px; top: 243px; border-width: 1px;"></div><div class="tile" id="tile-4-0" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 76px; left: 0px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-1" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 51px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-2" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 76px; left: 102px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-3" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 153px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-4" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 76px; left: 204px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-5" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 255px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-6" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 76px; left: 306px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-7" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 357px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-8" draggable="true" style="background-color: rgb(42, 192, 190); width: 50px; height: 76px; left: 408px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-9" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 459px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-10" draggable="true" style="background-color: rgb(90, 208, 27); width: 50px; height: 76px; left: 510px; top: 324px; border-width: 1px;"></div><div class="tile" id="tile-4-11" draggable="true" style="background-color: rgb(42, 192, 190); width: 39px; height: 76px; left: 561px; top: 324px; border-width: 1px;"></div></div>
+        </div>
+    </div>
+
+    <script>
+        let tileOptionCount = 0;
+
+        function addTileOption() {
+            tileOptionCount++;
+            const tileOptionsContainer = document.getElementById('tileOptionsContainer');
+            const tileOptionDiv = document.createElement('div');
+            tileOptionDiv.id = `tileOption${tileOptionCount}`;
+            tileOptionDiv.innerHTML = `
+                    <label for="tileColor${tileOptionCount}">Tile Color:</label>
+                    <input type="color" id="tileColor${tileOptionCount}">
+
+                    <label for="tilePattern${tileOptionCount}">Tile Pattern:</label>
+                    <select id="tilePattern${tileOptionCount}">
+                        <option value="none">None</option>
+                        <option value="stripes">Stripes</option>
+                        <option value="dots">Dots</option>
+                    </select>
+                    <button onclick="removeTileOption(${tileOptionCount})">Remove</button>
+                    <br>
+                `;
+            tileOptionsContainer.appendChild(tileOptionDiv);
+        }
+
+        function removeTileOption(id) {
+            const tileOptionDiv = document.getElementById(`tileOption${id}`);
+            tileOptionDiv.remove();
+        }
+
+        function calculateTiles() {
+            const roomWidth = parseFloat(document.getElementById('roomWidth').value);
+            const roomHeight = parseFloat(document.getElementById('roomHeight').value);
+            const tileWidth = parseFloat(document.getElementById('tileWidth').value) / 100; // Convert to meters
+            const tileHeight = parseFloat(document.getElementById('tileHeight').value) / 100; // Convert to meters
+            const tileGap = parseFloat(document.getElementById('tileGap').value) / 1000; // Convert to meters
+
+            if (isNaN(roomWidth) || isNaN(roomHeight) || isNaN(tileWidth) || isNaN(tileHeight) || isNaN(tileGap)) {
+                alert('Please enter valid numbers for all fields.');
+                return;
+            }
+
+            const scale = 200; // Scale factor to convert meters to pixels
+            const containerWidth = roomWidth * scale;
+            const containerHeight = roomHeight * scale;
+
+            const tilesAcross = Math.ceil(roomWidth / (tileWidth + tileGap));
+            const tilesDown = Math.ceil(roomHeight / (tileHeight + tileGap));
+            const totalTiles = tilesAcross * tilesDown;
+
+            document.getElementById('result').innerText = `You will need approximately ${totalTiles} tiles to cover the floor.`;
+
+            const tileContainer = document.getElementById('tileContainer');
+            tileContainer.innerHTML = `
+                    <div class="dimensions width-dimension" id="widthDimension"></div>
+                    <div class="dimensions height-dimension" id="heightDimension"></div>
+                `;
+            tileContainer.style.width = `${containerWidth}px`;
+            tileContainer.style.height = `${containerHeight}px`;
+
+            document.getElementById('widthDimension').innerText = `${roomWidth.toFixed(2)}m`;
+            document.getElementById('heightDimension').innerText = `${roomHeight.toFixed(2)}m`;
+
+            const tileOptions = getTileOptions();
+
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < tilesDown; i++) {
+                for (let j = 0; j < tilesAcross; j++) {
+                    const tile = createTile(tileOptions, i, j, tileWidth, tileHeight, tileGap, scale, roomWidth, roomHeight, tilesAcross);
+                    fragment.appendChild(tile);
+                }
+            }
+            tileContainer.appendChild(fragment);
+        }
+
+        function getTileOptions() {
+            const tileOptions = [];
+            for (let i = 1; i <= tileOptionCount; i++) {
+                const tileColor = document.getElementById(`tileColor${i}`).value;
+                const tilePattern = document.getElementById(`tilePattern${i}`).value;
+                tileOptions.push({ color: tileColor, pattern: tilePattern });
+            }
+            return tileOptions;
+        }
+
+        function createTile(tileOptions, i, j, tileWidth, tileHeight, tileGap, scale, roomWidth, roomHeight, tilesAcross) {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.id = `tile-${i}-${j}`;
+            const tileOption = tileOptions[(i * tilesAcross + j) % tileOptions.length];
+            tile.style.backgroundColor = tileOption.color;
+            tile.style.width = `${tileWidth * scale}px`;
+            tile.style.height = `${tileHeight * scale}px`;
+            tile.style.left = `${j * (tileWidth + tileGap) * scale}px`;
+            tile.style.top = `${i * (tileHeight + tileGap) * scale}px`;
+            tile.style.borderWidth = `${tileGap * scale}px`;
+            tile.draggable = true;
+            tile.ondragstart = dragStart;
+            tile.ondragover = dragOver;
+            tile.ondrop = drop;
+
+            if (tileOption.pattern === 'stripes') {
+                tile.style.backgroundImage = 'linear-gradient(45deg, #fff 25%, transparent 25%, transparent 50%, #fff 50%, #fff 75%, transparent 75%, transparent)';
+                tile.style.backgroundSize = '20px 20px';
+            } else if (tileOption.pattern === 'dots') {
+                tile.style.backgroundImage = 'radial-gradient(#fff 20%, transparent 20%)';
+                tile.style.backgroundSize = '10px 10px';
+            }
+
+            // Adjust tile size if it doesn't fit perfectly
+            const remainingWidth = roomWidth - j * (tileWidth + tileGap);
+            const remainingHeight = roomHeight - i * (tileHeight + tileGap);
+            if (remainingWidth < tileWidth) {
+                tile.style.width = `${remainingWidth * scale}px`;
+            }
+            if (remainingHeight < tileHeight) {
+                tile.style.height = `${remainingHeight * scale}px`;
+            }
+
+            return tile;
+        }
+
+        function dragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.id);
+        }
+
+        function dragOver(event) {
+            event.preventDefault();
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            const startId = event.dataTransfer.getData('text/plain');
+            const endId = event.target.id;
+
+            if (startId !== endId) {
+                const startElement = document.getElementById(startId);
+                const endElement = document.getElementById(endId);
+
+                // Swap the options of the tiles
+                const startColor = startElement.style.backgroundColor;
+                const startPattern = startElement.style.backgroundImage;
+                const endColor = endElement.style.backgroundColor;
+                const endPattern = endElement.style.backgroundImage;
+
+                startElement.style.backgroundColor = endColor;
+                startElement.style.backgroundImage = endPattern;
+                endElement.style.backgroundColor = startColor;
+                endElement.style.backgroundImage = startPattern;
+            }
+        }
+
+        function addDragAndDropHandlers(element) {
+            element.ondragstart = dragStart;
+            element.ondragover = dragOver;
+            element.ondrop = drop;
+        }
+
+        function saveConfiguration() {
+            const configuration = {
+                roomWidth: document.getElementById('roomWidth').value,
+                roomHeight: document.getElementById('roomHeight').value,
+                tileWidth: document.getElementById('tileWidth').value,
+                tileHeight: document.getElementById('tileHeight').value,
+                tileGap: document.getElementById('tileGap').value,
+                tileOptions: getTileOptions()
+            };
+
+            localStorage.setItem('tileLayoutConfiguration', JSON.stringify(configuration));
+            alert('Configuration saved!');
+        }
+
+        function loadConfiguration() {
+            const configuration = JSON.parse(localStorage.getItem('tileLayoutConfiguration'));
+
+            if (configuration) {
+                document.getElementById('roomWidth').value = configuration.roomWidth;
+                document.getElementById('roomHeight').value = configuration.roomHeight;
+                document.getElementById('tileWidth').value = configuration.tileWidth;
+                document.getElementById('tileHeight').value = configuration.tileHeight;
+                document.getElementById('tileGap').value = configuration.tileGap;
+
+                const tileOptionsContainer = document.getElementById('tileOptionsContainer');
+                tileOptionsContainer.innerHTML = '';
+                tileOptionCount = 0;
+
+                configuration.tileOptions.forEach((option, index) => {
+                    tileOptionCount++;
+                    const tileOptionDiv = document.createElement('div');
+                    tileOptionDiv.id = `tileOption${tileOptionCount}`;
+                    tileOptionDiv.innerHTML = `
+                            <label for="tileColor${tileOptionCount}">Tile Color:</label>
+                            <input type="color" id="tileColor${tileOptionCount}" value="${option.color}">
+
+                            <label for="tilePattern${tileOptionCount}">Tile Pattern:</label>
+                            <select id="tilePattern${tileOptionCount}">
+                                <option value="none" ${option.pattern === 'none' ? 'selected' : ''}>None</option>
+                                <option value="stripes" ${option.pattern === 'stripes' ? 'selected' : ''}>Stripes</option>
+                                <option value="dots" ${option.pattern === 'dots' ? 'selected' : ''}>Dots</option>
+                            </select>
+                            <button onclick="removeTileOption(${tileOptionCount})">Remove</button>
+                            <br>
+                        `;
+                    tileOptionsContainer.appendChild(tileOptionDiv);
+                });
+
+                alert('Configuration loaded!');
+            } else {
+                alert('No configuration found!');
+            }
+        }
+    </script>
+
+
+</body></html>
